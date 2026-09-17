@@ -34,7 +34,20 @@ exports.handler = async (event) => {
     if (!bcrpRes.ok) {
       return { statusCode: 502, body: JSON.stringify({ error: 'No se pudo consultar el tipo de cambio del BCRP' }) };
     }
-    const bcrpData = await bcrpRes.json();
+    // El BCRP a veces envuelve el JSON con texto extra alrededor —
+    // se extrae el objeto real entre la primera '{' y la última '}'.
+    const bcrpText = await bcrpRes.text();
+    const jsonStart = bcrpText.indexOf('{');
+    const jsonEnd = bcrpText.lastIndexOf('}');
+    if (jsonStart === -1 || jsonEnd === -1) {
+      return { statusCode: 502, body: JSON.stringify({ error: 'La respuesta del BCRP no contiene un JSON reconocible' }) };
+    }
+    let bcrpData;
+    try {
+      bcrpData = JSON.parse(bcrpText.slice(jsonStart, jsonEnd + 1));
+    } catch (parseErr) {
+      return { statusCode: 502, body: JSON.stringify({ error: `No se pudo interpretar la respuesta del BCRP: ${parseErr.message}` }) };
+    }
     const periods = bcrpData.periods || [];
     const lastValid = [...periods].reverse().find(
       (p) => p.values && p.values[0] && p.values[0] !== 'n.d.'
