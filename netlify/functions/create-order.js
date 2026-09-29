@@ -1,14 +1,11 @@
 // ---- create-order ----
-// Recibe {title, priceUSD, email, externalReference} desde el sitio.
-// 1) Consulta el tipo de cambio oficial del BCRP (serie PD04640PD, venta SBS).
-// 2) Le suma un margen del 5%.
-// 3) Convierte el precio en dólares mostrado en el sitio a soles.
-// 4) Crea la orden en Mercado Pago (Orders API) y devuelve el checkout_url.
+// Recibe {title, priceUSD, email, fullName, externalReference} desde el sitio.
+// 1) Convierte el precio en dólares mostrado en el sitio a soles, usando
+//    un tipo de cambio fijo configurable (variable EXCHANGE_RATE_PEN en Netlify).
+// 2) Crea la orden en Mercado Pago (Orders API) y devuelve el checkout_url.
 //
 // El precio en dólares NUNCA cambia en el sitio — solo el monto que
-// realmente se cobra en soles se ajusta al tipo de cambio del día.
-
-const MARGIN = 1.05; // tipo de cambio oficial + 5%
+// realmente se cobra en soles depende de este tipo de cambio.
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -22,49 +19,22 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'JSON inválido' }) };
   }
 
-  const { title, priceUSD, email, externalReference } = payload;
+  const { title, priceUSD, email, fullName, externalReference } = payload;
 
   if (!title || !priceUSD || !email) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Faltan datos: title, priceUSD o email' }) };
   }
 
   try {
-    // 1) Tipo de cambio oficial del BCRP (serie diaria, venta SBS)
-    const bcrpRes = await fetch('https://estadisticas.bcrp.gob.pe/estadisticas/series/api/PD04640PD/json');
-    if (!bcrpRes.ok) {
-      return { statusCode: 502, body: JSON.stringify({ error: 'No se pudo consultar el tipo de cambio del BCRP' }) };
-    }
-    // El BCRP a veces envuelve el JSON con texto extra alrededor —
-    // se extrae el objeto real entre la primera '{' y la última '}'.
-    const bcrpText = await bcrpRes.text();
-    const jsonStart = bcrpText.indexOf('{');
-    const jsonEnd = bcrpText.lastIndexOf('}');
-    if (jsonStart === -1 || jsonEnd === -1) {
-      return { statusCode: 502, body: JSON.stringify({ error: 'La respuesta del BCRP no contiene un JSON reconocible' }) };
-    }
-    let bcrpData;
-    try {
-      bcrpData = JSON.parse(bcrpText.slice(jsonStart, jsonEnd + 1));
-    } catch (parseErr) {
-      return { statusCode: 502, body: JSON.stringify({ error: `No se pudo interpretar la respuesta del BCRP: ${parseErr.message}` }) };
-    }
-    const periods = bcrpData.periods || [];
-    const lastValid = [...periods].reverse().find(
-      (p) => p.values && p.values[0] && p.values[0] !== 'n.d.'
-    );
-    if (!lastValid) {
-      return { statusCode: 502, body: JSON.stringify({ error: 'El BCRP no devolvió un tipo de cambio válido' }) };
-    }
-    const officialRate = parseFloat(lastValid.values[0]);
+    // Tipo de cambio: fijo, configurable desde Netlify (variable EXCHANGE_RATE_PEN),
+    // sin depender de ninguna API externa. Cambialo ahí cuando quieras ajustar el valor.
+    const rate = parseFloat(process.env.EXCHANGE_RATE_PEN || '3.37');
 
-    // 2) + 5% de margen
-    const rate = officialRate * MARGIN;
-
-    // 3) Conversión del precio mostrado (USD) a soles
+    // Conversión del precio mostrado (USD) a soles
     const priceUSDNum = parseFloat(priceUSD);
     const totalAmountPEN = (priceUSDNum * rate).toFixed(2);
 
-    // 4) Crear la orden en Mercado Pago
+    // Crear la orden en Mercado Pago
     const idempotencyKey =
       (typeof crypto !== 'undefined' && crypto.randomUUID)
         ? crypto.randomUUID()
@@ -72,13 +42,21 @@ exports.handler = async (event) => {
 
     const siteUrl = process.env.URL || 'https://petitbox.art';
 
+    // Nombre del comprador: se divide en nombre y apellido para el payer de Mercado Pago
+    const payer = { email };
+    if (fullName && fullName.trim()) {
+      const parts = fullName.trim().split(/\s+/);
+      payer.first_name = parts[0];
+      payer.last_name = parts.slice(1).join(' ') || parts[0];
+    }
+
     const orderPayload = {
       type: 'online',
       processing_mode: 'manual',
       total_amount: totalAmountPEN,
       external_reference: externalReference || `petitbox_${Date.now()}`,
-      description: `${title} — US$ ${priceUSDNum.toFixed(2)} al tipo de cambio oficial + 5% (S/ ${rate.toFixed(4)})`,
-      payer: { email },
+      description: `${title} — US$ ${priceUSDNum.toFixed(2)} (tipo de cambio S/ ${rate.toFixed(2)})`,
+      payer,
       items: [
         {
           title: title,

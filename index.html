@@ -8,597 +8,571 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,440;1,9..144,420&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --black:#0a0a0a;
-    --void:#050504;
-    --panel:#141412;
-    --white:#ede8db;
-    --red:#a8672f;
-    --gray:#8a887c;
-    --line:#242420;
-    /* ---- Materiales de la caja: cada sección toma el color de un
-           pigmento real, no un bloque decorativo suelto. ---- */
-    --gesso:#e8e1cd;
-    --gesso-ink:#2b2519;
-    --gesso-line:#c9bfa2;
-    --sienna:#7c4326;
-    --sienna-line:#96593a;
-    --graphite:#201f1c;
-    --graphite-line:#38352e;
-    --umber:#33241a;
-    --umber-line:#4a3728;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  body{
-    font-family: Georgia, 'Times New Roman', serif;
-    background:var(--black);
-    color:var(--white);
-    line-height:1.5;
-  }
-  .display{
-    font-family:'Fraunces', Georgia, serif;
-    font-optical-sizing:auto;
-  }
-  .announce-bar{
-    background:#c9974f; color:#2b2010;
-    text-align:center;
-    padding:12px 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size:12px;
-  }
-  .announce-bar b{
-    font-weight:700; letter-spacing:2px; text-transform:uppercase;
-  }
-  .announce-bar em{
-    font-family:'Fraunces', Georgia, serif;
-    font-style:italic; font-weight:440;
-    font-size:14px; letter-spacing:.2px;
-    margin-left:2px;
-  }
-  nav{
-    display:flex; flex-direction:column; align-items:center;
-    padding:24px 48px 18px;
-    background:var(--black);
-    position:sticky; top:0; z-index:1;
-  }
-  nav .logo{height:34px; margin-bottom:8px;}
-  nav .slogan{font-size:13px; font-style:italic; color:#bbb; letter-spacing:.3px; margin-bottom:6px;}
-  nav .nav-links{
-    display:flex; margin-top:6px;
-    padding-top:14px; border-top:1px solid var(--line);
-  }
-  nav .nav-links a{
-    color:#ccc; text-decoration:none;
-    font-size:12px; letter-spacing:2px; text-transform:uppercase;
-    font-family: Arial, Helvetica, sans-serif;
-    margin:0 14px;
-  }
-  nav .nav-links a:hover{color:var(--white);}
-
-  /* ---- La caja: el gesto central. El cursor es la mirilla —
-         el óleo del maestro vive bajo un velo negro y solo se
-         entrega ahí donde el visitante mira. ---- */
-  .hero-box{
-    position:relative;
-    height:78vh;
-    min-height:460px;
-    max-height:720px;
-    overflow:hidden;
-    background:var(--void);
-    cursor:none;
-  }
-  .hero-box .artwork{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    object-fit:contain;
-    background:var(--void);
-  }
-  .hero-box .veil{
-    position:absolute; inset:0;
-    background:var(--void);
-    pointer-events:none;
-    -webkit-mask-image:radial-gradient(circle at var(--mx,50%) var(--my,38%), transparent 0px, transparent 90px, black 200px);
-    mask-image:radial-gradient(circle at var(--mx,50%) var(--my,38%), transparent 0px, transparent 90px, black 200px);
-  }
-  .hero-box .peephole{
-    position:absolute;
-    width:26px; height:26px;
-    border:1px solid rgba(237,232,219,.55);
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    left:var(--mx,50%); top:var(--my,38%);
-    pointer-events:none;
-    transition:width .18s ease, height .18s ease, opacity .3s ease;
-  }
-  .hero-box:hover .peephole{width:14px; height:14px;}
-  .hero-box .hero-caption{
-    position:absolute; left:0; right:0; bottom:0;
-    padding:26px 48px 30px;
-    text-align:center;
-    pointer-events:none;
-    background:linear-gradient(to top, rgba(5,5,4,.85), rgba(5,5,4,0));
-  }
-  .hero-box h1{
-    font-size:44px;
-    font-weight:440;
-    letter-spacing:.2px;
-    margin-bottom:12px;
-  }
-  .hero-box h1 b{color:var(--red); font-style:italic; font-weight:420;}
-  .hero-hint{
-    font-size:11px; letter-spacing:2px; text-transform:uppercase;
-    color:var(--gray);
-    font-family: Arial, Helvetica, sans-serif;
-    margin-bottom:6px;
-  }
-  .hero-sub{
-    max-width:600px;
-    margin:0 auto;
-    font-size:16px;
-    color:#cfcabb;
-  }
-  @media (max-width:820px){
-    .hero-box{cursor:auto;}
-    .hero-box .peephole{display:none;}
-    .hero-box h1{font-size:32px;}
-  }
-
-  /* ---- El relato: visible al llegar, no escondido ---- */
-  .zone-gesso{
-    background:var(--gesso);
-    border-bottom:1px solid var(--gesso-line);
-  }
-  .manifesto{
-    max-width:640px;
-    margin:0 auto;
-    padding:70px 48px 80px;
-    text-align:center;
-  }
-  .manifesto p{
-    font-size:16px;
-    color:#4d4331;
-    margin-bottom:16px;
-  }
-  .manifesto b{color:var(--sienna); font-style:italic;}
-
-  /* ---- Teaser: tres poleras, un color cada una — el primer
-         contacto con la mercancía, antes del catálogo entero. ---- */
-  .zone-teaser{
-    background:var(--sienna);
-    border-bottom:1px solid var(--sienna-line);
-  }
-  .teaser{
-    padding:70px 48px 80px;
-    max-width:900px;
-    margin:0 auto;
-    text-align:center;
-  }
-  .zone-teaser .eyebrow{color:#e6c9ab;}
-  .teaser h2{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:440;
-    font-size:28px;
-    margin-bottom:14px;
-    color:var(--white);
-  }
-  .teaser > p{
-    color:#eadfcd;
-    max-width:480px;
-    margin:0 auto 44px;
-    font-size:15px;
-  }
-  .teaser-row{
-    display:flex;
-    justify-content:center;
-    gap:36px;
-    flex-wrap:wrap;
-  }
-  .teaser-row .card{width:200px;}
-  .teaser-more{
-    display:inline-block;
-    margin-top:46px;
-    color:var(--white);
-    text-decoration:none;
-    font-size:12px; letter-spacing:2px; text-transform:uppercase;
-    font-family: Arial, Helvetica, sans-serif;
-    border-bottom:1px solid var(--sienna-line);
-    padding-bottom:4px;
-  }
-  /* ---- Cifras imposibles: no métricas de venta, sino la escala
-         de la paradoja — cero maestros vivos, quince robos, uno zurdo. ---- */
-  .zone-facts{
-    background:var(--void);
-  }
-  .facts-wrap{
-    padding:80px 48px;
-    max-width:1000px;
-    margin:0 auto;
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    gap:40px;
-  }
-  @media (max-width:820px){
-    .facts-wrap{grid-template-columns:repeat(2, 1fr); gap:50px 30px;}
-  }
-  .fact{text-align:center;}
-  .fact-index{
-    font-size:11px; letter-spacing:2px; color:var(--gray);
-    font-family: Arial, Helvetica, sans-serif;
-    margin-bottom:10px;
-  }
-  .fact-number{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:440;
-    font-size:52px;
-    color:var(--red);
-    line-height:1;
-  }
-  .fact-label{
-    font-size:13px;
-    color:#c9c5b6;
-    margin-top:12px;
-    max-width:180px;
-    margin-left:auto; margin-right:auto;
-  }
-
-  .teaser-more:hover{border-color:var(--white);}
-
-  .eyebrow{
-    text-transform:uppercase;
-    letter-spacing:3px;
-    font-size:12px;
-    color:var(--gray);
-    text-align:center;
-    margin-bottom:40px;
-  }
-  /* ---- Cada obra, sin marco: la foto tal como es, con un gesto
-         mínimo al pasar el cursor — nada que enjaule la imagen. ---- */
-  .card{
-    text-align:center;
-    cursor:pointer;
-  }
-  .card .slot{
-    overflow:hidden;
-  }
-  .card .slot img{
-    width:100%;
-    height:auto;
-    display:block;
-    transition:opacity .2s ease;
-  }
-  .card:hover .slot img{opacity:.85;}
-  .card h3{
-    font-family:'Fraunces', Georgia, serif;
-    font-size:14px;
-    font-weight:440;
-    margin-top:14px;
-    color:var(--white);
-  }
-  .card .artist{
-    font-size:11px;
-    color:var(--gray);
-    margin-top:2px;
-  }
-
-  .modal-overlay{
-    display:none;
-    position:fixed; top:0; right:0; bottom:0; left:0;
-    background:var(--black);
-    z-index:200;
-    overflow-y:auto;
-    padding:40px 20px;
-  }
-  .modal-overlay.open{display:block;}
-  .modal-inner{
-    max-width:680px;
-    margin:0 auto;
-    color:var(--white);
-    text-align:center;
-  }
-  .modal-close{
-    position:sticky; top:0;
-    display:block;
-    margin-left:auto; margin-bottom:10px;
-    background:none; border:none; color:var(--white);
-    font-size:28px; cursor:pointer; line-height:1;
-  }
-
-  /* ---- Carrusel: cada slide ocupa el 100% del contenedor, sin tope que lo achique.
-         Ningún object-fit:cover en ningún lado — las fotos nunca se recortan. ---- */
-  .carousel{
-    display:flex;
-    align-items:flex-start;
-    overflow-x:auto;
-    scroll-snap-type:x mandatory;
-    gap:0;
-    margin-top:20px;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-  }
-  .carousel::-webkit-scrollbar{display:none;}
-  .carousel img{
-    flex:0 0 100%;
-    width:100%;
-    height:auto;
-    display:block;
-    scroll-snap-align:start;
-    border-radius:2px;
-    background:#050505;
-  }
-  .carousel-label{
-    font-size:10px; letter-spacing:2px; text-transform:uppercase;
-    color:var(--gray); margin-top:10px;
-  }
-  .modal-inner h2{font-family:'Fraunces', Georgia, serif; font-size:24px; margin-top:22px; font-weight:440;}
-  .modal-inner .artist{color:var(--gray); font-size:14px; margin-top:4px;}
-  .modal-swatches{
-    display:flex; justify-content:center;
-    margin-top:20px;
-  }
-  .modal-swatches .swatch{
-    width:22px; height:22px;
-    border-radius:50%;
-    border:1px solid #555;
-    cursor:pointer;
-    margin:0 5px;
-  }
-  .modal-swatches .swatch.active{outline:2px solid var(--white); outline-offset:2px;}
-  .swatch[data-color="blanco"]{background:#f5f5f0;}
-  .swatch[data-color="camello"]{background:#c9974f;}
-  .swatch[data-color="gris"]{background:#6f7267;}
-  .swatch[data-color="marron"]{background:#5a4632;}
-  .swatch[data-color="negro"]{background:#111111;}
-  .swatch[data-color="verde"]{background:#1f5c37;}
-
-  .carousel-wrap{position:relative;}
-  .zoom-lens{
-    position:absolute;
-    width:150px; height:150px;
-    border-radius:50%;
-    border:1px solid rgba(237,232,219,.7);
-    pointer-events:none;
-    background-repeat:no-repeat;
-    box-shadow:0 0 0 2000px rgba(5,5,4,.35);
-    display:none;
-    z-index:5;
-  }
-  .zoom-hint{
-    font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
-    color:var(--gray); text-align:center; margin-top:6px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  @media (max-width:820px){ .zoom-hint{display:none;} }
-
-  .modal-material{
-    font-size:12px;
-    color:var(--gray);
-    margin-top:10px;
-    letter-spacing:.3px;
-  }
-
-  .size-row{
-    display:flex; justify-content:center; gap:8px;
-    margin-top:18px;
-  }
-  .size-row .size{
-    width:38px; height:38px;
-    border:1px solid #444;
-    border-radius:50%;
-    background:none;
-    color:var(--white);
-    font-family: Arial, Helvetica, sans-serif;
-    font-size:12px;
-    cursor:pointer;
-  }
-  .size-row .size.active{background:var(--white); color:var(--black); border-color:var(--white);}
-  .size-note{
-    font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
-    color:var(--gray); text-align:center; margin-top:8px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  .modal-price{font-size:20px; margin-top:16px;}
-  .modal-buy{
-    display:flex; align-items:center; justify-content:center;
-    margin-top:26px;
-  }
-  .qty-stepper{
-    display:flex; align-items:center;
-    border:1px solid #444; border-radius:2px;
-    padding:8px 16px;
-    margin-right:20px;
-  }
-  .qty-stepper button{
-    background:none; border:none; color:var(--white);
-    font-size:18px; cursor:pointer; width:20px; margin:0 7px;
-  }
-  .qty-stepper span{font-size:15px; min-width:16px; text-align:center;}
-  .add-to-cart{
-    background:var(--red); color:var(--white);
-    border:none; padding:14px 32px;
-    font-family:inherit; font-size:14px;
-    letter-spacing:1px; text-transform:uppercase;
-    cursor:pointer; border-radius:2px;
-  }
-  .add-to-cart:hover{opacity:.9;}
-  .order-success{
-    display:none;
-    margin-top:26px;
-    padding-top:22px;
-    border-top:1px solid var(--line);
-    font-size:14px; color:#d9c9b8; line-height:1.6;
-  }
-  .order-success b{color:var(--white);}
-
-  .zone-commission{
-    background:var(--umber);
-    border-top:1px solid var(--umber-line);
-  }
-  .commission{
-    padding:90px 48px 36px;
-    text-align:center;
-    max-width:560px;
-    margin:0 auto;
-  }
-  .commission:last-of-type{padding:36px 48px 90px;}
-  .commission h2{font-family:'Fraunces', Georgia, serif; font-size:30px; margin-bottom:16px; font-weight:440; color:var(--white);}
-  .commission p{color:#d9c9b8;}
-  .commission-teaser-img{
-    width:100%; height:auto; display:block;
-  }
-  .commission-visual{
-    position:relative;
-    overflow:hidden;
-  }
-  .marquee-band{
-    position:absolute;
-    top:50%; left:0; right:0;
-    transform:translateY(-50%);
-    overflow:hidden;
-    pointer-events:none;
-    white-space:nowrap;
-  }
-  .marquee-track{
-    display:inline-flex;
-    animation:marquee-scroll 26s linear infinite;
-  }
-  .marquee-track span{
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight:300;
-    font-size:15px;
-    letter-spacing:7px;
-    color:var(--white);
-    mix-blend-mode:difference;
-    padding:0 22px;
-    white-space:nowrap;
-  }
-  @keyframes marquee-scroll{
-    from{transform:translateX(0);}
-    to{transform:translateX(-50%);}
-  }
-  @media (max-width:820px){
-    .marquee-track span{font-size:12px; letter-spacing:5px; padding:0 14px;}
-  }
-  .commission-link{
-    display:inline-block;
-    color:var(--white); text-decoration:none;
-    font-size:12px; letter-spacing:2px; text-transform:uppercase;
-    font-family: Arial, Helvetica, sans-serif;
-    border-bottom:1px solid var(--umber-line);
-    padding-bottom:4px;
-  }
-  .commission-link:hover{border-color:var(--white);}
-
-  footer{
-    text-align:center;
-    padding:40px;
-    font-size:13px;
-    color:var(--gray);
-    border-top:1px solid var(--line);
-  }
-
-  /* ---- Caja lateral: invitación a la lista, con el incentivo del 20% ---- */
-  .newsletter-box{
-    position:fixed; bottom:24px; right:24px;
-    width:300px;
-    background:var(--black);
-    border:1px solid var(--line);
-    padding:26px 24px 22px;
-    z-index:150;
-    box-shadow:0 8px 30px rgba(0,0,0,.5);
-    transform:translateY(20px);
-    opacity:0;
-    pointer-events:none;
-    transition:transform .4s ease, opacity .4s ease;
-  }
-  .newsletter-box.show{
-    transform:translateY(0);
-    opacity:1;
-    pointer-events:auto;
-  }
-  .newsletter-close{
-    position:absolute; top:10px; right:12px;
-    background:none; border:none; color:var(--gray);
-    font-size:16px; cursor:pointer; line-height:1;
-  }
-  .newsletter-peek{
-    display:flex; align-items:center; gap:10px;
-    margin-bottom:14px;
-  }
-  .newsletter-peek img{width:44px; height:auto; display:block; flex-shrink:0;}
-  .newsletter-peek span{
-    font-family:'Fraunces', Georgia, serif;
-    font-style:italic; font-weight:440;
-    font-size:13px; color:#e6c9ab; line-height:1.35;
-  }
-  .newsletter-box h4{
-    font-family:'Fraunces', Georgia, serif;
-    font-size:16px; font-weight:440; margin-bottom:6px; color:var(--white);
-  }
-  .newsletter-box .newsletter-sub{
-    font-size:12px; color:var(--red); margin-bottom:16px; letter-spacing:.3px;
-  }
-  .newsletter-box input{
-    width:100%;
-    background:none; border:none; border-bottom:1px solid #444;
-    color:var(--white); font-family:inherit; font-size:13px;
-    padding:8px 2px; margin-bottom:14px;
-  }
-  .newsletter-box input::placeholder{color:#777;}
-  .newsletter-submit{
-    width:100%;
-    background:none; border:1px solid var(--white); color:var(--white);
-    padding:10px; font-family:inherit; font-size:12px;
-    letter-spacing:1px; text-transform:uppercase; cursor:pointer;
-  }
-  .newsletter-submit:hover{background:var(--white); color:var(--black);}
-  .newsletter-success{
-    font-size:13px; color:var(--white); line-height:1.6;
-    display:none;
-  }
-
-  .modal-material{
-    margin-top:22px;
-    padding:14px 18px;
-    border:1px solid var(--red);
-    border-radius:2px;
-    font-size:13px;
-    color:#ddd;
-    line-height:1.6;
-    text-align:left;
-    letter-spacing:0;
-  }
-  .modal-material b{display:block; color:var(--white); margin-bottom:4px;}
-  .shipping-note{
-    font-size:11px;
-    color:var(--gray);
-    margin-top:14px;
-  }
-  .email-capture{
-    margin-top:26px;
-    padding-top:22px;
-    border-top:1px solid var(--line);
-    text-align:left;
-  }
-  .email-capture label{
-    display:block;
-    font-size:12px;
-    color:var(--gray);
-    margin-bottom:8px;
-  }
-  .email-capture input{
-    width:100%;
-    background:none; border:1px solid #444; border-radius:2px;
-    color:var(--white); font-family:inherit; font-size:14px;
-    padding:12px 14px;
-  }
-  .email-capture input.invalid{border-color:var(--red);}
-  .email-error{
-    display:none;
-    font-size:12px; color:var(--red);
-    margin-top:8px;
-  }
-  .email-error.show{display:block;}
+:root{
+--black:#0a0a0a;
+--void:#050504;
+--panel:#141412;
+--white:#ede8db;
+--red:#a8672f;
+--gray:#8a887c;
+--line:#242420;
+--gesso:#e8e1cd;
+--gesso-ink:#2b2519;
+--gesso-line:#c9bfa2;
+--sienna:#7c4326;
+--sienna-line:#96593a;
+--graphite:#201f1c;
+--graphite-line:#38352e;
+--umber:#33241a;
+--umber-line:#4a3728;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+font-family: Georgia, 'Times New Roman', serif;
+background:var(--black);
+color:var(--white);
+line-height:1.5;
+}
+.display{
+font-family:'Fraunces', Georgia, serif;
+font-optical-sizing:auto;
+}
+.announce-bar{
+background:#c9974f; color:#2b2010;
+text-align:center;
+padding:12px 20px;
+font-family: Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+.announce-bar b{
+font-weight:700; letter-spacing:2px; text-transform:uppercase;
+}
+.announce-bar em{
+font-family:'Fraunces', Georgia, serif;
+font-style:italic; font-weight:440;
+font-size:14px; letter-spacing:.2px;
+margin-left:2px;
+}
+nav{
+display:flex; flex-direction:column; align-items:center;
+padding:24px 48px 18px;
+background:var(--black);
+position:sticky; top:0; z-index:1;
+}
+nav .logo{height:34px; margin-bottom:8px;}
+nav .slogan{font-size:13px; font-style:italic; color:#bbb; letter-spacing:.3px; margin-bottom:6px;}
+nav .nav-links{
+display:flex; margin-top:6px;
+padding-top:14px; border-top:1px solid var(--line);
+}
+nav .nav-links a{
+color:#ccc; text-decoration:none;
+font-size:12px; letter-spacing:2px; text-transform:uppercase;
+font-family: Arial, Helvetica, sans-serif;
+margin:0 14px;
+}
+nav .nav-links a:hover{color:var(--white);}
+.hero-box{
+position:relative;
+height:78vh;
+min-height:460px;
+max-height:720px;
+overflow:hidden;
+background:var(--void);
+cursor:none;
+}
+.hero-box .artwork{
+position:absolute; inset:0;
+width:100%; height:100%;
+object-fit:contain;
+background:var(--void);
+}
+.hero-box .veil{
+position:absolute; inset:0;
+background:var(--void);
+pointer-events:none;
+-webkit-mask-image:radial-gradient(circle at var(--mx,50%) var(--my,38%), transparent 0px, transparent 90px, black 200px);
+mask-image:radial-gradient(circle at var(--mx,50%) var(--my,38%), transparent 0px, transparent 90px, black 200px);
+}
+.hero-box .peephole{
+position:absolute;
+width:26px; height:26px;
+border:1px solid rgba(237,232,219,.55);
+border-radius:50%;
+transform:translate(-50%,-50%);
+left:var(--mx,50%); top:var(--my,38%);
+pointer-events:none;
+transition:width .18s ease, height .18s ease, opacity .3s ease;
+}
+.hero-box:hover .peephole{width:14px; height:14px;}
+.hero-box .hero-caption{
+position:absolute; left:0; right:0; bottom:0;
+padding:26px 48px 30px;
+text-align:center;
+pointer-events:none;
+background:linear-gradient(to top, rgba(5,5,4,.85), rgba(5,5,4,0));
+}
+.hero-box h1{
+font-size:44px;
+font-weight:440;
+letter-spacing:.2px;
+margin-bottom:12px;
+}
+.hero-box h1 b{color:var(--red); font-style:italic; font-weight:420;}
+.hero-hint{
+font-size:11px; letter-spacing:2px; text-transform:uppercase;
+color:var(--gray);
+font-family: Arial, Helvetica, sans-serif;
+margin-bottom:6px;
+}
+.hero-sub{
+max-width:600px;
+margin:0 auto;
+font-size:16px;
+color:#cfcabb;
+}
+@media (max-width:820px){
+.hero-box{cursor:auto;}
+.hero-box .peephole{display:none;}
+.hero-box h1{font-size:32px;}
+}
+.zone-gesso{
+background:var(--gesso);
+border-bottom:1px solid var(--gesso-line);
+}
+.manifesto{
+max-width:640px;
+margin:0 auto;
+padding:70px 48px 80px;
+text-align:center;
+}
+.manifesto p{
+font-size:16px;
+color:#4d4331;
+margin-bottom:16px;
+}
+.manifesto b{color:var(--sienna); font-style:italic;}
+.zone-teaser{
+background:var(--sienna);
+border-bottom:1px solid var(--sienna-line);
+}
+.teaser{
+padding:70px 48px 80px;
+max-width:900px;
+margin:0 auto;
+text-align:center;
+}
+.zone-teaser .eyebrow{color:#e6c9ab;}
+.teaser h2{
+font-family:'Fraunces', Georgia, serif;
+font-weight:440;
+font-size:28px;
+margin-bottom:14px;
+color:var(--white);
+}
+.teaser > p{
+color:#eadfcd;
+max-width:480px;
+margin:0 auto 44px;
+font-size:15px;
+}
+.teaser-row{
+display:flex;
+justify-content:center;
+gap:36px;
+flex-wrap:wrap;
+}
+.teaser-row .card{width:200px;}
+.teaser-more{
+display:inline-block;
+margin-top:46px;
+color:var(--white);
+text-decoration:none;
+font-size:12px; letter-spacing:2px; text-transform:uppercase;
+font-family: Arial, Helvetica, sans-serif;
+border-bottom:1px solid var(--sienna-line);
+padding-bottom:4px;
+}
+.zone-facts{
+background:var(--void);
+}
+.facts-wrap{
+padding:80px 48px;
+max-width:1000px;
+margin:0 auto;
+display:grid;
+grid-template-columns:repeat(4, 1fr);
+gap:40px;
+}
+@media (max-width:820px){
+.facts-wrap{grid-template-columns:repeat(2, 1fr); gap:50px 30px;}
+}
+.fact{text-align:center;}
+.fact-index{
+font-size:11px; letter-spacing:2px; color:var(--gray);
+font-family: Arial, Helvetica, sans-serif;
+margin-bottom:10px;
+}
+.fact-number{
+font-family:'Fraunces', Georgia, serif;
+font-weight:440;
+font-size:52px;
+color:var(--red);
+line-height:1;
+}
+.fact-label{
+font-size:13px;
+color:#c9c5b6;
+margin-top:12px;
+max-width:180px;
+margin-left:auto; margin-right:auto;
+}
+.teaser-more:hover{border-color:var(--white);}
+.eyebrow{
+text-transform:uppercase;
+letter-spacing:3px;
+font-size:12px;
+color:var(--gray);
+text-align:center;
+margin-bottom:40px;
+}
+.card{
+text-align:center;
+cursor:pointer;
+}
+.card .slot{
+overflow:hidden;
+}
+.card .slot img{
+width:100%;
+height:auto;
+display:block;
+transition:opacity .2s ease;
+}
+.card:hover .slot img{opacity:.85;}
+.card h3{
+font-family:'Fraunces', Georgia, serif;
+font-size:14px;
+font-weight:440;
+margin-top:14px;
+color:var(--white);
+}
+.card .artist{
+font-size:11px;
+color:var(--gray);
+margin-top:2px;
+}
+.modal-overlay{
+display:none;
+position:fixed; top:0; right:0; bottom:0; left:0;
+background:var(--black);
+z-index:200;
+overflow-y:auto;
+padding:40px 20px;
+}
+.modal-overlay.open{display:block;}
+.modal-inner{
+max-width:680px;
+margin:0 auto;
+color:var(--white);
+text-align:center;
+}
+.modal-close{
+position:sticky; top:0;
+display:block;
+margin-left:auto; margin-bottom:10px;
+background:none; border:none; color:var(--white);
+font-size:28px; cursor:pointer; line-height:1;
+}
+.carousel{
+display:flex;
+align-items:flex-start;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+gap:0;
+margin-top:20px;
+-webkit-overflow-scrolling:touch;
+scrollbar-width:none;
+}
+.carousel::-webkit-scrollbar{display:none;}
+.carousel img{
+flex:0 0 100%;
+width:100%;
+height:auto;
+display:block;
+scroll-snap-align:start;
+border-radius:2px;
+background:#050505;
+}
+.carousel-label{
+font-size:10px; letter-spacing:2px; text-transform:uppercase;
+color:var(--gray); margin-top:10px;
+}
+.modal-inner h2{font-family:'Fraunces', Georgia, serif; font-size:24px; margin-top:22px; font-weight:440;}
+.modal-inner .artist{color:var(--gray); font-size:14px; margin-top:4px;}
+.modal-swatches{
+display:flex; justify-content:center;
+margin-top:20px;
+}
+.modal-swatches .swatch{
+width:22px; height:22px;
+border-radius:50%;
+border:1px solid #555;
+cursor:pointer;
+margin:0 5px;
+}
+.modal-swatches .swatch.active{outline:2px solid var(--white); outline-offset:2px;}
+.swatch[data-color="blanco"]{background:#f5f5f0;}
+.swatch[data-color="camello"]{background:#c9974f;}
+.swatch[data-color="gris"]{background:#6f7267;}
+.swatch[data-color="marron"]{background:#5a4632;}
+.swatch[data-color="negro"]{background:#111111;}
+.swatch[data-color="verde"]{background:#1f5c37;}
+.carousel-wrap{position:relative;}
+.zoom-lens{
+position:absolute;
+width:150px; height:150px;
+border-radius:50%;
+border:1px solid rgba(237,232,219,.7);
+pointer-events:none;
+background-repeat:no-repeat;
+box-shadow:0 0 0 2000px rgba(5,5,4,.35);
+display:none;
+z-index:5;
+}
+.zoom-hint{
+font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+color:var(--gray); text-align:center; margin-top:6px;
+font-family: Arial, Helvetica, sans-serif;
+}
+@media (max-width:820px){ .zoom-hint{display:none;} }
+.modal-material{
+margin-top:22px;
+padding:14px 18px;
+border:1px solid var(--red);
+border-radius:2px;
+font-size:13px;
+color:#ddd;
+line-height:1.6;
+text-align:left;
+letter-spacing:0;
+}
+.modal-material b{display:block; color:var(--white); margin-bottom:4px;}
+.size-row{
+display:flex; justify-content:center; gap:8px;
+margin-top:18px;
+}
+.size-row .size{
+width:38px; height:38px;
+border:1px solid #444;
+border-radius:50%;
+background:none;
+color:var(--white);
+font-family: Arial, Helvetica, sans-serif;
+font-size:12px;
+cursor:pointer;
+}
+.size-row .size.active{background:var(--white); color:var(--black); border-color:var(--white);}
+.size-note{
+font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+color:var(--gray); text-align:center; margin-top:8px;
+font-family: Arial, Helvetica, sans-serif;
+}
+.modal-price{font-size:20px; margin-top:16px;}
+.modal-buy{
+display:flex; align-items:center; justify-content:center;
+margin-top:26px;
+}
+.qty-stepper{
+display:flex; align-items:center;
+border:1px solid #444; border-radius:2px;
+padding:8px 16px;
+margin-right:20px;
+}
+.qty-stepper button{
+background:none; border:none; color:var(--white);
+font-size:18px; cursor:pointer; width:20px; margin:0 7px;
+}
+.qty-stepper span{font-size:15px; min-width:16px; text-align:center;}
+.add-to-cart{
+background:var(--red); color:var(--white);
+border:none; padding:14px 32px;
+font-family:inherit; font-size:14px;
+letter-spacing:1px; text-transform:uppercase;
+cursor:pointer; border-radius:2px;
+}
+.add-to-cart:hover{opacity:.9;}
+.order-success{
+display:none;
+margin-top:26px;
+padding-top:22px;
+border-top:1px solid var(--line);
+font-size:14px; color:#d9c9b8; line-height:1.6;
+}
+.order-success b{color:var(--white);}
+.zone-commission{
+background:var(--umber);
+border-top:1px solid var(--umber-line);
+}
+.commission{
+padding:90px 48px 36px;
+text-align:center;
+max-width:560px;
+margin:0 auto;
+}
+.commission:last-of-type{padding:36px 48px 90px;}
+.commission h2{font-family:'Fraunces', Georgia, serif; font-size:30px; margin-bottom:16px; font-weight:440; color:var(--white);}
+.commission p{color:#d9c9b8;}
+.commission-teaser-img{
+width:100%; height:auto; display:block;
+}
+.commission-visual{
+position:relative;
+overflow:hidden;
+}
+.marquee-band{
+position:absolute;
+top:50%; left:0; right:0;
+transform:translateY(-50%);
+overflow:hidden;
+pointer-events:none;
+white-space:nowrap;
+}
+.marquee-track{
+display:inline-flex;
+animation:marquee-scroll 26s linear infinite;
+}
+.marquee-track span{
+font-family: Arial, Helvetica, sans-serif;
+font-weight:300;
+font-size:15px;
+letter-spacing:7px;
+color:var(--white);
+mix-blend-mode:difference;
+padding:0 22px;
+white-space:nowrap;
+}
+@keyframes marquee-scroll{
+from{transform:translateX(0);}
+to{transform:translateX(-50%);}
+}
+@media (max-width:820px){
+.marquee-track span{font-size:12px; letter-spacing:5px; padding:0 14px;}
+}
+.commission-link{
+display:inline-block;
+color:var(--white); text-decoration:none;
+font-size:12px; letter-spacing:2px; text-transform:uppercase;
+font-family: Arial, Helvetica, sans-serif;
+border-bottom:1px solid var(--umber-line);
+padding-bottom:4px;
+}
+.commission-link:hover{border-color:var(--white);}
+footer{
+text-align:center;
+padding:40px;
+font-size:13px;
+color:var(--gray);
+border-top:1px solid var(--line);
+}
+.newsletter-box{
+position:fixed; bottom:24px; right:24px;
+width:300px;
+background:var(--black);
+border:1px solid var(--line);
+padding:26px 24px 22px;
+z-index:150;
+box-shadow:0 8px 30px rgba(0,0,0,.5);
+transform:translateY(20px);
+opacity:0;
+pointer-events:none;
+transition:transform .4s ease, opacity .4s ease;
+}
+.newsletter-box.show{
+transform:translateY(0);
+opacity:1;
+pointer-events:auto;
+}
+.newsletter-close{
+position:absolute; top:10px; right:12px;
+background:none; border:none; color:var(--gray);
+font-size:16px; cursor:pointer; line-height:1;
+}
+.newsletter-peek{
+display:flex; align-items:center; gap:10px;
+margin-bottom:14px;
+}
+.newsletter-peek img{width:44px; height:auto; display:block; flex-shrink:0;}
+.newsletter-peek span{
+font-family:'Fraunces', Georgia, serif;
+font-style:italic; font-weight:440;
+font-size:13px; color:#e6c9ab; line-height:1.35;
+}
+.newsletter-box h4{
+font-family:'Fraunces', Georgia, serif;
+font-size:16px; font-weight:440; margin-bottom:6px; color:var(--white);
+}
+.newsletter-box .newsletter-sub{
+font-size:12px; color:var(--red); margin-bottom:16px; letter-spacing:.3px;
+}
+.newsletter-box input{
+width:100%;
+background:none; border:none; border-bottom:1px solid #444;
+color:var(--white); font-family:inherit; font-size:13px;
+padding:8px 2px; margin-bottom:14px;
+}
+.newsletter-box input::placeholder{color:#777;}
+.newsletter-submit{
+width:100%;
+background:none; border:1px solid var(--white); color:var(--white);
+padding:10px; font-family:inherit; font-size:12px;
+letter-spacing:1px; text-transform:uppercase; cursor:pointer;
+}
+.newsletter-submit:hover{background:var(--white); color:var(--black);}
+.newsletter-success{
+font-size:13px; color:var(--white); line-height:1.6;
+display:none;
+}
+.shipping-note{
+font-size:11px;
+color:var(--gray);
+margin-top:14px;
+}
+.email-capture{
+margin-top:26px;
+padding-top:22px;
+border-top:1px solid var(--line);
+text-align:left;
+}
+.email-capture label{
+display:block;
+font-size:12px;
+color:var(--gray);
+margin-bottom:8px;
+}
+.email-capture input{
+width:100%;
+background:none; border:1px solid #444; border-radius:2px;
+color:var(--white); font-family:inherit; font-size:14px;
+padding:12px 14px;
+}
+.email-capture input.invalid{border-color:var(--red);}
+.email-error{
+display:none;
+font-size:12px; color:var(--red);
+margin-top:8px;
+}
+.email-error.show{display:block;}
+.field-group{margin-bottom:14px;}
+.field-group label{display:block; font-size:12px; color:var(--gray); margin-bottom:8px;}
+.field-group input{
+width:100%;
+background:none; border:1px solid #444; border-radius:2px;
+color:var(--white); font-family:inherit; font-size:14px;
+padding:12px 14px;
+}
+.field-row{display:flex; gap:12px;}
+.field-row .field-group{flex:1;}
 </style>
 </head>
 <body>
@@ -606,215 +580,238 @@
 <div class="announce-bar" id="announceBar"><b>Free shipping</b><em>worldwide, always.</em></div>
 
 <nav>
-  <img class="logo" src="assets/logo.png" alt="petitbox">
-  <div class="slogan">Grandmasters become alive</div>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="catalog.html">Catalog</a>
-    <a href="commission.html">Commission</a>
-  </div>
+<img class="logo" src="assets/logo.png" alt="petitbox">
+<div class="slogan">Grandmasters become alive</div>
+<div class="nav-links">
+<a href="#about">About</a>
+<a href="catalog.html">Catalog</a>
+<a href="commission.html">Commission</a>
+</div>
 </nav>
 
 <span id="about" style="display:block; position:relative; top:-90px;"></span>
+
 <div class="hero-box" id="heroBox">
-  <img class="artwork" id="heroArtwork" src="assets/hero/box-eyes.jpg" alt="Inside the box — an eye watching from within the master's crate">
-  <div class="veil" id="heroVeil"></div>
-  <div class="peephole" id="heroPeephole"></div>
-  <div class="hero-caption">
-    <div class="hero-hint">Move to look inside</div>
-    <h1 class="display">INSIDE THE <b>petit</b>BOX.</h1>
-    <p class="hero-sub">petitbox catches the moment a masterwork was still becoming itself — half resolved, half suspended in the air — caught inside a small triangle.</p>
-  </div>
+<img class="artwork" id="heroArtwork" src="assets/hero/box-eyes.jpg" alt="Inside the box — an eye watching from within the master's crate">
+<div class="veil" id="heroVeil"></div>
+<div class="peephole" id="heroPeephole"></div>
+<div class="hero-caption">
+<div class="hero-hint">Move to look inside</div>
+<h1 class="display">INSIDE THE <b>petit</b>BOX.</h1>
+<p class="hero-sub">petitbox catches the moment a masterwork was still becoming itself — half resolved, half suspended in the air — caught inside a small triangle.</p>
+</div>
 </div>
 
 <div class="zone-gesso">
 <div class="manifesto">
-  <p>Step inside, and the brush is still moving. Half the canvas has already surrendered to the master's hand; the other half is still charcoal, still guesswork, still becoming. petitbox freezes exactly that instant <b>in process</b> — always the one breath before the finished painting, always caught mid-transformation. The angle is low, oblique, stolen: as if you'd slipped into the painter's own box of materials and were watching, from inside, over their shoulder.</p>
-  <p><b>Grandmasters become alive.</b> Somewhere, once, this exact light happened — a color still deciding what it wanted to become, a line still testing its own nerve — caught here, permanently, inside a small and stubborn triangle.</p>
+<p>Step inside, and the brush is still moving. Half the canvas has already surrendered to the master's hand; the other half is still charcoal, still guesswork, still becoming. petitbox freezes exactly that instant <b>in process</b> — always the one breath before the finished painting, always caught mid-transformation. The angle is low, oblique, stolen: as if you'd slipped into the painter's own box of materials and were watching, from inside, over their shoulder.</p>
+<p><b>Grandmasters become alive.</b> Somewhere, once, this exact light happened — a color still deciding what it wanted to become, a line still testing its own nerve — caught here, permanently, inside a small and stubborn triangle.</p>
 </div>
 </div>
 
 <div class="zone-facts" id="facts">
-  <div class="facts-wrap">
-    <div class="fact">
-      <div class="fact-index">01</div>
-      <div class="fact-number" data-target-key="shirts">0</div>
-      <div class="fact-label">Shirt models — every work, every shade</div>
-    </div>
-    <div class="fact">
-      <div class="fact-index">02</div>
-      <div class="fact-number" data-target-key="works">0</div>
-      <div class="fact-label">Works caught mid-transformation</div>
-    </div>
-    <div class="fact">
-      <div class="fact-index">03</div>
-      <div class="fact-number" data-target-key="colors">0</div>
-      <div class="fact-label">Shades, hand-picked for every triangle</div>
-    </div>
-    <div class="fact">
-      <div class="fact-index">04</div>
-      <div class="fact-number" data-target="1">0</div>
-      <div class="fact-label">Left-handed among them all</div>
-    </div>
-  </div>
+<div class="facts-wrap">
+<div class="fact">
+<div class="fact-index">01</div>
+<div class="fact-number" data-target-key="shirts">0</div>
+<div class="fact-label">Shirt models — every work, every shade</div>
+</div>
+<div class="fact">
+<div class="fact-index">02</div>
+<div class="fact-number" data-target-key="works">0</div>
+<div class="fact-label">Works caught mid-transformation</div>
+</div>
+<div class="fact">
+<div class="fact-index">03</div>
+<div class="fact-number" data-target-key="colors">0</div>
+<div class="fact-label">Shades, hand-picked for every triangle</div>
+</div>
+<div class="fact">
+<div class="fact-index">04</div>
+<div class="fact-number" data-target="1">0</div>
+<div class="fact-label">Left-handed among them all</div>
+</div>
+</div>
 </div>
 
 <div class="zone-teaser" id="teaser">
 <div class="teaser">
-  <div class="eyebrow">Three ways in</div>
-  <h2 class="display">A first look inside the box</h2>
-  <p>Three masters, three shades — a small sample of the fifteen waiting in the full catalog.</p>
-  <div class="teaser-row" id="teaserRow"></div>
-  <a href="catalog.html" class="teaser-more">See the full catalog</a>
+<div class="eyebrow">Three ways in</div>
+<h2 class="display">A first look inside the box</h2>
+<p>Three masters, three shades — a small sample of the fifteen waiting in the full catalog.</p>
+<div class="teaser-row" id="teaserRow"></div>
+<a href="catalog.html" class="teaser-more">See the full catalog</a>
 </div>
 </div>
 
 <div class="zone-commission">
 <div class="commission" id="commission">
-  <h2>Commission yours</h2>
-  <p>Commission the sculpture, and we'll turn your own photo into a shirt to match — one commission, two objects, both yours.</p>
+<h2>Commission yours</h2>
+<p>Commission the sculpture, and we'll turn your own photo into a shirt to match — one commission, two objects, both yours.</p>
 </div>
 <div class="commission-visual">
-  <img class="commission-teaser-img" src="assets/extra/sculpture-editorial.jpg" alt="The petitbox sculpture, our limited-edition stainless steel piece">
-  <div class="marquee-band">
-    <div class="marquee-track">
-      <span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span>
-      <span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span>
-    </div>
-  </div>
+<img class="commission-teaser-img" src="assets/extra/sculpture-editorial.jpg" alt="The petitbox sculpture, our limited-edition stainless steel piece">
+<div class="marquee-band">
+<div class="marquee-track">
+<span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span>
+<span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span><span>LIMITED EDITION</span>
+</div>
+</div>
 </div>
 <div class="commission">
-  <a href="commission.html" class="commission-link">Commission yours</a>
+<a href="commission.html" class="commission-link">Commission yours</a>
 </div>
 </div>
 
 <footer>
-  petitbox.art — Grandmasters become alive.
+petitbox.art — Grandmasters become alive.
 </footer>
 
 <div class="newsletter-box" id="newsletterBox">
-  <button class="newsletter-close" id="newsletterClose">&times;</button>
-  <div class="newsletter-peek">
-    <img src="assets/box-eyes.png" alt="petitbox, peeking">
-    <span>We see you — from inside the box.</span>
-  </div>
-  <form id="newsletterForm" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-    <input type="hidden" name="form-name" value="newsletter">
-    <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
-    <h4>Join the list</h4>
-    <div class="newsletter-sub">Get 20% off your first order</div>
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <button type="submit" class="newsletter-submit">Subscribe</button>
-  </form>
-  <div class="newsletter-success" id="newsletterSuccess">Look inside your petit inbox for the 20% off.</div>
+<button class="newsletter-close" id="newsletterClose">&times;</button>
+<div class="newsletter-peek">
+<img src="assets/box-eyes.png" alt="petitbox, peeking">
+<span>We see you — from inside the box.</span>
+</div>
+<form id="newsletterForm" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+<input type="hidden" name="form-name" value="newsletter">
+<p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+<h4>Join the list</h4>
+<div class="newsletter-sub">Get 20% off your first order</div>
+<input type="text" name="name" placeholder="Name" required>
+<input type="email" name="email" placeholder="Email" required>
+<button type="submit" class="newsletter-submit">Subscribe</button>
+</form>
+<div class="newsletter-success" id="newsletterSuccess">Look inside your petit inbox for the 20% off.</div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal-inner">
-    <button class="modal-close" id="modalClose">&times;</button>
-    <div class="carousel-wrap">
-      <div class="carousel" id="modalCarousel"></div>
-      <div class="zoom-lens" id="zoomLens"></div>
-    </div>
-    <div class="carousel-label" id="carouselLabel">The design — before the shirt</div>
-    <div class="zoom-hint">Hover to see the weave up close</div>
-    <h2 id="modalTitle"></h2>
-    <div class="artist" id="modalArtist"></div>
-    <div class="modal-material">
-      <b>100% Peruvian cotton — 100% combed cotton.</b>
-      Printed in DTG (Direct-to-Garment) for gallery-grade color and detail.
-    </div>
-    <div class="modal-price" id="modalPrice">$99</div>
-    <div class="modal-swatches" id="modalSwatches"></div>
-    <div class="size-row" id="sizeRow">
-      <button type="button" class="size" data-size="XS">XS</button>
-      <button type="button" class="size" data-size="S">S</button>
-      <button type="button" class="size active" data-size="M">M</button>
-      <button type="button" class="size" data-size="L">L</button>
-      <button type="button" class="size" data-size="XL">XL</button>
-    </div>
-    <div class="size-note">US sizing</div>
+<div class="modal-inner">
+<button class="modal-close" id="modalClose">&times;</button>
+<div class="carousel-wrap">
+<div class="carousel" id="modalCarousel"></div>
+<div class="zoom-lens" id="zoomLens"></div>
+</div>
+<div class="carousel-label" id="carouselLabel">The design — before the shirt</div>
+<div class="zoom-hint">Hover to see the weave up close</div>
+<h2 id="modalTitle"></h2>
+<div class="artist" id="modalArtist"></div>
+<div class="modal-material">
+<b>100% Peruvian cotton — 100% combed cotton.</b>
+Printed in DTG (Direct-to-Garment) for gallery-grade color and detail.
+</div>
+<div class="modal-price" id="modalPrice">$99</div>
+<div class="modal-swatches" id="modalSwatches"></div>
+<div class="size-row" id="sizeRow">
+<button type="button" class="size" data-size="XS">XS</button>
+<button type="button" class="size" data-size="S">S</button>
+<button type="button" class="size active" data-size="M">M</button>
+<button type="button" class="size" data-size="L">L</button>
+<button type="button" class="size" data-size="XL">XL</button>
+</div>
+<div class="size-note">US sizing</div>
 
-    <form id="orderForm" name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/order-received.html">
-      <input type="hidden" name="form-name" value="order">
-      <p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
-      <input type="hidden" name="work" id="orderWork">
-      <input type="hidden" name="artist" id="orderArtist">
-      <input type="hidden" name="color" id="orderColor">
-      <input type="hidden" name="size" id="orderSize" value="M">
-      <input type="hidden" name="price" id="orderPrice">
-      <input type="hidden" name="quantity" id="orderQty" value="1">
+<form id="orderForm" name="order" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/order-received.html">
+<input type="hidden" name="form-name" value="order">
+<p style="display:none"><label>Don't fill this out: <input name="bot-field"></label></p>
+<input type="hidden" name="work" id="orderWork">
+<input type="hidden" name="artist" id="orderArtist">
+<input type="hidden" name="color" id="orderColor">
+<input type="hidden" name="size" id="orderSize" value="M">
+<input type="hidden" name="price" id="orderPrice">
+<input type="hidden" name="quantity" id="orderQty" value="1">
 
-      <div class="modal-buy">
-        <div class="qty-stepper">
-          <button type="button" id="qtyMinus">−</button>
-          <span id="qtyValue">1</span>
-          <button type="button" id="qtyPlus">+</button>
-        </div>
-        <button type="submit" class="add-to-cart" id="addToCart">Place order</button>
-      </div>
-      <p class="shipping-note">Standard shipping via Serpost — 10 to 25 business days. Payment is confirmed by email before production.</p>
-      <div class="email-capture">
-        <label for="buyerEmail">Email — your certificate of authenticity (PDF) is sent here</label>
-        <input type="email" name="email" id="buyerEmail" placeholder="you@email.com" required>
-      </div>
-    </form>
-    <div class="order-success" id="orderSuccess">
-      <p><b>Received, from inside the box.</b> Your shirt is next in line — same hand, same box, now sized and addressed to you. Watch your inbox: that's where the details, and the timeline, will find you.</p>
-    </div>
-  </div>
+<div class="modal-buy">
+<div class="qty-stepper">
+<button type="button" id="qtyMinus">−</button>
+<span id="qtyValue">1</span>
+<button type="button" id="qtyPlus">+</button>
+</div>
+<button type="submit" class="add-to-cart" id="addToCart">Place order</button>
+</div>
+<p class="shipping-note">Standard shipping via Serpost — 10 to 25 business days. Payment is confirmed by email before production.</p>
+
+<div class="email-capture">
+<div class="field-group">
+<label for="buyerName">Full name</label>
+<input type="text" name="fullName" id="buyerName" placeholder="Your full name" required>
+</div>
+<div class="field-group">
+<label for="buyerAddress">Shipping address</label>
+<input type="text" name="address" id="buyerAddress" placeholder="Street, number, apartment" required>
+</div>
+<div class="field-row">
+<div class="field-group">
+<label for="buyerCity">City</label>
+<input type="text" name="city" id="buyerCity" placeholder="City" required>
+</div>
+<div class="field-group">
+<label for="buyerCountry">Country</label>
+<input type="text" name="country" id="buyerCountry" placeholder="Country" required>
+</div>
+</div>
+<div class="field-group">
+<label for="buyerPhone">Phone</label>
+<input type="tel" name="phone" id="buyerPhone" placeholder="For delivery coordination" required>
+</div>
+<div class="field-group">
+<label for="buyerEmail">Email — your certificate of authenticity (PDF) is sent here</label>
+<input type="email" name="email" id="buyerEmail" placeholder="you@email.com" required>
+</div>
+</div>
+</form>
+<div class="order-success" id="orderSuccess">
+<p><b>Received, from inside the box.</b> Your shirt is next in line — same hand, same box, now sized and addressed to you. Watch your inbox: that's where the details, and the timeline, will find you.</p>
+</div>
+</div>
 </div>
 
 <script src="assets/js/works.js"></script>
 <script>
-// ---- Teaser: tres obras distintas, cada una en su propio color —
-//      el primer contacto, antes de bajar al catálogo entero. ----
-// ---- Cifras imposibles: calculadas del catálogo real, nunca
-//      escritas a mano — si agregas una obra, la cuenta se corrige sola. ----
 const factValues = {
-  shirts: works.length * colors.length,
-  works: works.length,
-  colors: colors.length,
+shirts: works.length * colors.length,
+works: works.length,
+colors: colors.length,
 };
+
 const factEls = document.querySelectorAll('.fact-number');
 function animateCount(el, target){
-  const duration = 1200;
-  const start = performance.now();
-  function tick(now){
-    const p = Math.min(1, (now - start) / duration);
-    const eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(eased * target);
-    if(p < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
+const duration = 1200;
+const start = performance.now();
+function tick(now){
+const p = Math.min(1, (now - start) / duration);
+const eased = 1 - Math.pow(1 - p, 3);
+el.textContent = Math.round(eased * target);
+if(p < 1) requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
 }
 const factsObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting){
-      factEls.forEach(el => {
-        const key = el.dataset.targetKey;
-        const target = key ? factValues[key] : parseInt(el.dataset.target, 10);
-        animateCount(el, target);
-      });
-      factsObserver.disconnect();
-    }
-  });
+entries.forEach(entry => {
+if(entry.isIntersecting){
+factEls.forEach(el => {
+const key = el.dataset.targetKey;
+const target = key ? factValues[key] : parseInt(el.dataset.target, 10);
+animateCount(el, target);
+});
+factsObserver.disconnect();
+}
+});
 }, {threshold: 0.4});
 factsObserver.observe(document.getElementById('facts'));
 
 const teaserWorks = works.slice(0, 3);
 const teaserRow = document.getElementById('teaserRow');
 teaserWorks.forEach(w => {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.innerHTML = `
-    <div class="slot"><img src="assets/artworks/${w.key}.png" alt="${w.artist} — in process"></div>
-    <h3>${w.title}</h3>
-    <div class="artist">${w.artist}</div>
-  `;
-  card.addEventListener('click', () => openModal(w));
-  teaserRow.appendChild(card);
+const card = document.createElement('div');
+card.className = 'card';
+card.innerHTML = `
+<div class="slot"><img src="assets/artworks/${w.key}.png" alt="${w.artist} — in process"></div>
+<h3>${w.title}</h3>
+<div class="artist">${w.artist}</div>
+`;
+card.addEventListener('click', () => openModal(w));
+teaserRow.appendChild(card);
 });
 
 const overlay = document.getElementById('modalOverlay');
@@ -826,256 +823,225 @@ const carouselLabel = document.getElementById('carouselLabel');
 const zoomLens = document.getElementById('zoomLens');
 
 document.querySelectorAll('#sizeRow .size').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#sizeRow .size').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('orderSize').value = btn.dataset.size;
-  });
+btn.addEventListener('click', () => {
+document.querySelectorAll('#sizeRow .size').forEach(b => b.classList.remove('active'));
+btn.classList.add('active');
+document.getElementById('orderSize').value = btn.dataset.size;
+});
 });
 
 function priceForQty(qty){
-  if(qty === 1) return 99;
-  if(qty === 2) return 149;
-  if(qty === 3) return 229;
-  return Math.round((229 / 3) * qty);
+if(qty === 1) return 99;
+if(qty === 2) return 149;
+if(qty === 3) return 229;
+return Math.round((229 / 3) * qty);
 }
 function updatePrice(qty){
-  const p = priceForQty(qty);
-  document.getElementById('modalPrice').textContent = `$${p}`;
-  document.getElementById('orderPrice').value = `$${p}`;
+const p = priceForQty(qty);
+document.getElementById('modalPrice').textContent = `$${p}`;
+document.getElementById('orderPrice').value = `$${p}`;
 }
 
 document.getElementById('orderForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const btn = document.getElementById('addToCart');
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
+e.preventDefault();
+const form = e.target;
+const btn = document.getElementById('addToCart');
+btn.disabled = true;
+btn.textContent = 'Sending…';
+const formData = new FormData(form);
+fetch('/', {
+method: 'POST',
+headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+body: new URLSearchParams(formData).toString(),
+});
 
-  const formData = new FormData(form);
-  // Registro de respaldo en Netlify Forms (no bloquea el pago)
-  fetch('/', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: new URLSearchParams(formData).toString(),
-  });
+const title = `${document.getElementById('orderWork').value} — ${document.getElementById('orderColor').value}, size ${document.getElementById('orderSize').value}, qty ${document.getElementById('orderQty').value}`;
+const priceUSD = document.getElementById('orderPrice').value.replace('$', '');
+const email = document.getElementById('buyerEmail').value;
+const fullName = document.getElementById('buyerName').value;
 
-  const title = `${document.getElementById('orderWork').value} — ${document.getElementById('orderColor').value}, size ${document.getElementById('orderSize').value}, qty ${document.getElementById('orderQty').value}`;
-  const priceUSD = document.getElementById('orderPrice').value.replace('$', '');
-  const email = document.getElementById('buyerEmail').value;
-
-  fetch('/.netlify/functions/create-order', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ title, priceUSD, email }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.checkout_url) {
-        window.location.href = data.checkout_url;
-      } else {
-        throw new Error('no checkout_url');
-      }
-    })
-    .catch(() => {
-      form.style.display = 'none';
-      document.getElementById('orderSuccess').style.display = 'block';
-    });
+fetch('/.netlify/functions/create-order', {
+method: 'POST',
+headers: {'Content-Type': 'application/json'},
+body: JSON.stringify({ title, priceUSD, email, fullName }),
+})
+.then((res) => res.json())
+.then((data) => {
+if (data.checkout_url) {
+window.location.href = data.checkout_url;
+} else {
+throw new Error('no checkout_url');
+}
+})
+.catch(() => {
+form.style.display = 'none';
+document.getElementById('orderSuccess').style.display = 'block';
+});
 });
 
 function openModal(work, startColor){
-  const openColor = startColor || work.defaultColor;
-  let qty = 1;
-  document.getElementById('qtyValue').textContent = qty;
-  document.getElementById('orderQty').value = qty;
-  document.getElementById('buyerEmail').value = '';
-  document.getElementById('orderWork').value = work.title;
-  document.getElementById('orderArtist').value = work.artist;
-  document.getElementById('orderColor').value = colorLabels[openColor] || openColor;
-  document.getElementById('orderSize').value = 'M';
-  document.getElementById('orderForm').style.display = 'block';
-  document.getElementById('orderSuccess').style.display = 'none';
-  document.getElementById('addToCart').disabled = false;
-  document.getElementById('addToCart').textContent = 'Place order';
-  updatePrice(qty);
+const openColor = startColor || work.defaultColor;
+let qty = 1;
+document.getElementById('qtyValue').textContent = qty;
+document.getElementById('orderQty').value = qty;
+document.getElementById('buyerEmail').value = '';
+document.getElementById('buyerName').value = '';
+document.getElementById('buyerAddress').value = '';
+document.getElementById('buyerCity').value = '';
+document.getElementById('buyerCountry').value = '';
+document.getElementById('buyerPhone').value = '';
+document.getElementById('orderWork').value = work.title;
+document.getElementById('orderArtist').value = work.artist;
+document.getElementById('orderColor').value = colorLabels[openColor] || openColor;
+document.getElementById('orderSize').value = 'M';
+document.getElementById('orderForm').style.display = 'block';
+document.getElementById('orderSuccess').style.display = 'none';
+document.getElementById('addToCart').disabled = false;
+document.getElementById('addToCart').textContent = 'Place order';
+updatePrice(qty);
 
-  modalTitle.textContent = work.title;
-  modalArtist.textContent = work.artist;
+modalTitle.textContent = work.title;
+modalArtist.textContent = work.artist;
 
-  // La polera va primero — el triángulo suelto queda al final, para
-  // quien quiera ver el diseño limpio, no como parada obligatoria.
-  carousel.innerHTML =
-    colors.map(c => `<img class="shirt-shot" data-color="${c}" src="assets/mockups_web/${work.key}__${c}.jpg" alt="${work.artist} — ${c}">`).join('') +
-    `<img class="artwork-shot" src="assets/artworks/${work.key}.png" alt="${work.artist} — design">`;
+carousel.innerHTML =
+colors.map(c => `<img class="shirt-shot" data-color="${c}" src="assets/mockups_web/${work.key}__${c}.jpg" alt="${work.artist} — ${c}">`).join('') +
+`<img class="artwork-shot" src="assets/artworks/${work.key}.png" alt="${work.artist} — design">`;
 
-  const slides = Array.from(carousel.children);
+const slides = Array.from(carousel.children);
 
-  modalSwatches.innerHTML = colors.map(c =>
-    `<span class="swatch${c===openColor?' active':''}" data-color="${c}"></span>`
-  ).join('');
+modalSwatches.innerHTML = colors.map(c =>
+`<span class="swatch${c===openColor?' active':''}" data-color="${c}"></span>`
+).join('');
 
-  function scrollToColor(c){
-    const idx = colors.indexOf(c);
-    carousel.scrollTo({left: slides[idx].offsetLeft, behavior:'smooth'});
-  }
+function scrollToColor(c){
+const idx = colors.indexOf(c);
+carousel.scrollTo({left: slides[idx].offsetLeft, behavior:'smooth'});
+}
 
-  modalSwatches.querySelectorAll('.swatch').forEach(sw => {
-    sw.addEventListener('click', () => {
-      scrollToColor(sw.dataset.color);
-      modalSwatches.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-      sw.classList.add('active');
-      document.getElementById('orderColor').value = colorLabels[sw.dataset.color] || sw.dataset.color;
-    });
-  });
+modalSwatches.querySelectorAll('.swatch').forEach(sw => {
+sw.addEventListener('click', () => {
+scrollToColor(sw.dataset.color);
+modalSwatches.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+sw.classList.add('active');
+document.getElementById('orderColor').value = colorLabels[sw.dataset.color] || sw.dataset.color;
+});
+});
 
-  let scrollTimeout;
-  carousel.onscroll = () => {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-      const idx = Math.round(carousel.scrollLeft / carousel.clientWidth);
-      if(idx >= colors.length){
-        carouselLabel.textContent = 'The design — before the shirt';
-        modalSwatches.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-      } else {
-        const c = colors[idx];
-        carouselLabel.textContent = colorLabels[c] || (c.charAt(0).toUpperCase() + c.slice(1));
-        modalSwatches.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.color === c));
-      }
-    }, 100);
-  };
+let scrollTimeout;
+carousel.onscroll = () => {
+clearTimeout(scrollTimeout);
+scrollTimeout = setTimeout(() => {
+const idx = Math.round(carousel.scrollLeft / carousel.clientWidth);
+if(idx >= colors.length){
+carouselLabel.textContent = 'The design — before the shirt';
+modalSwatches.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+} else {
+const c = colors[idx];
+carouselLabel.textContent = colorLabels[c] || (c.charAt(0).toUpperCase() + c.slice(1));
+modalSwatches.querySelectorAll('.swatch').forEach(s => s.classList.toggle('active', s.dataset.color === c));
+}
+}, 100);
+};
 
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+overlay.classList.add('open');
+document.body.style.overflow = 'hidden';
 
-  carousel.scrollLeft = 0;
-  requestAnimationFrame(() => scrollToColor(openColor));
-  carouselLabel.textContent = colorLabels[openColor] || (openColor.charAt(0).toUpperCase() + openColor.slice(1));
+carousel.scrollLeft = 0;
+requestAnimationFrame(() => scrollToColor(openColor));
+carouselLabel.textContent = colorLabels[openColor] || (openColor.charAt(0).toUpperCase() + openColor.slice(1));
 
-  // ---- Tallas: reinicia a M cada vez que se abre una obra nueva ----
-  document.querySelectorAll('#sizeRow .size').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.size === 'M');
-  });
+document.querySelectorAll('#sizeRow .size').forEach(btn => {
+btn.classList.toggle('active', btn.dataset.size === 'M');
+});
 
-  // ---- La lupa: el mismo gesto de la mirilla del hero, ahora al
-  //      servicio de ver la trama y el DTG de cerca antes de comprar. ----
-  const ZOOM = 2.6;
-  const LENS_SIZE = 150;
-  function activeSlide(){
-    const idx = Math.round(carousel.scrollLeft / carousel.clientWidth);
-    return slides[Math.min(idx, slides.length - 1)];
-  }
-  function moveLens(clientX, clientY){
-    const slide = activeSlide();
-    const rect = slide.getBoundingClientRect();
-    const relX = clientX - rect.left;
-    const relY = clientY - rect.top;
-    if(relX < 0 || relY < 0 || relX > rect.width || relY > rect.height){
-      zoomLens.style.display = 'none';
-      return;
-    }
-    zoomLens.style.display = 'block';
-    const wrapRect = carousel.parentElement.getBoundingClientRect();
-    zoomLens.style.left = (clientX - wrapRect.left - LENS_SIZE / 2) + 'px';
-    zoomLens.style.top = (clientY - wrapRect.top - LENS_SIZE / 2) + 'px';
-    zoomLens.style.backgroundImage = `url("${slide.src}")`;
-    zoomLens.style.backgroundSize = (rect.width * ZOOM) + 'px ' + (rect.height * ZOOM) + 'px';
-    zoomLens.style.backgroundPosition = `-${relX * ZOOM - LENS_SIZE / 2}px -${relY * ZOOM - LENS_SIZE / 2}px`;
-  }
-  carousel.parentElement.onmousemove = (e) => moveLens(e.clientX, e.clientY);
-  carousel.parentElement.onmouseleave = () => { zoomLens.style.display = 'none'; };
+const ZOOM = 2.6;
+const LENS_SIZE = 150;
+function activeSlide(){
+const idx = Math.round(carousel.scrollLeft / carousel.clientWidth);
+return slides[Math.min(idx, slides.length - 1)];
+}
+function moveLens(clientX, clientY){
+const slide = activeSlide();
+const rect = slide.getBoundingClientRect();
+const relX = clientX - rect.left;
+const relY = clientY - rect.top;
+if(relX < 0 || relY < 0 || relX > rect.width || relY > rect.height){
+zoomLens.style.display = 'none';
+return;
+}
+zoomLens.style.display = 'block';
+const wrapRect = carousel.parentElement.getBoundingClientRect();
+zoomLens.style.left = (clientX - wrapRect.left - LENS_SIZE / 2) + 'px';
+zoomLens.style.top = (clientY - wrapRect.top - LENS_SIZE / 2) + 'px';
+zoomLens.style.backgroundImage = `url("${slide.src}")`;
+zoomLens.style.backgroundSize = (rect.width * ZOOM) + 'px ' + (rect.height * ZOOM) + 'px';
+zoomLens.style.backgroundPosition = `-${relX * ZOOM - LENS_SIZE / 2}px -${relY * ZOOM - LENS_SIZE / 2}px`;
+}
+carousel.parentElement.onmousemove = (e) => moveLens(e.clientX, e.clientY);
+carousel.parentElement.onmouseleave = () => { zoomLens.style.display = 'none'; };
 }
 
 document.getElementById('qtyMinus').addEventListener('click', () => {
-  const el = document.getElementById('qtyValue');
-  const v = Math.max(1, parseInt(el.textContent) - 1);
-  el.textContent = v;
-  document.getElementById('orderQty').value = v;
-  updatePrice(v);
+const el = document.getElementById('qtyValue');
+const v = Math.max(1, parseInt(el.textContent) - 1);
+el.textContent = v;
+document.getElementById('orderQty').value = v;
+updatePrice(v);
 });
 document.getElementById('qtyPlus').addEventListener('click', () => {
-  const el = document.getElementById('qtyValue');
-  const v = Math.min(10, parseInt(el.textContent) + 1);
-  el.textContent = v;
-  document.getElementById('orderQty').value = v;
-  updatePrice(v);
+const el = document.getElementById('qtyValue');
+const v = Math.min(10, parseInt(el.textContent) + 1);
+el.textContent = v;
+document.getElementById('orderQty').value = v;
+updatePrice(v);
 });
 
 document.getElementById('modalClose').addEventListener('click', closeModal);
 overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
 
 function closeModal(){
-  overlay.classList.remove('open');
-  document.body.style.overflow = '';
+overlay.classList.remove('open');
+document.body.style.overflow = '';
 }
 
-// ---- La mirilla: el cursor descubre el óleo escondido bajo el velo ----
-(function(){
-  const box = document.getElementById('heroBox');
-  const veil = document.getElementById('heroVeil');
-  const hole = document.getElementById('heroPeephole');
-  const hint = box.querySelector('.hero-hint');
-  let hasMoved = false;
+const heroBox = document.getElementById('heroBox');
+if(heroBox){
+heroBox.addEventListener('mousemove', (e) => {
+const rect = heroBox.getBoundingClientRect();
+const mx = ((e.clientX - rect.left) / rect.width) * 100;
+const my = ((e.clientY - rect.top) / rect.height) * 100;
+heroBox.style.setProperty('--mx', mx + '%');
+heroBox.style.setProperty('--my', my + '%');
+});
+}
 
-  function setPos(xPct, yPct){
-    box.style.setProperty('--mx', xPct + '%');
-    box.style.setProperty('--my', yPct + '%');
-  }
-
-  function fromEvent(clientX, clientY){
-    const r = box.getBoundingClientRect();
-    const x = ((clientX - r.left) / r.width) * 100;
-    const y = ((clientY - r.top) / r.height) * 100;
-    setPos(Math.max(0,Math.min(100,x)), Math.max(0,Math.min(100,y)));
-    if(!hasMoved){ hasMoved = true; hint.style.opacity = '0'; }
-  }
-
-  box.addEventListener('mousemove', (e) => fromEvent(e.clientX, e.clientY));
-  box.addEventListener('touchmove', (e) => {
-    if(e.touches[0]) fromEvent(e.touches[0].clientX, e.touches[0].clientY);
-  }, {passive:true});
-
-  // Deriva autónoma y lenta hasta el primer gesto del visitante —
-  // la caja nunca se queda del todo cerrada, siempre insinúa movimiento.
-  let t = 0, raf;
-  function drift(){
-    if(hasMoved){ cancelAnimationFrame(raf); return; }
-    t += 0.006;
-    const x = 50 + Math.sin(t) * 22;
-    const y = 38 + Math.cos(t * 0.7) * 12;
-    setPos(x, y);
-    raf = requestAnimationFrame(drift);
-  }
-  drift();
-})();
-
-// ---- Caja lateral de suscripción: aparece una vez por sesión, con retardo ----
 const newsletterBox = document.getElementById('newsletterBox');
 function dismissNewsletter(){
-  newsletterBox.classList.remove('show');
-  sessionStorage.setItem('petitbox_newsletter_seen', '1');
+newsletterBox.classList.remove('show');
+sessionStorage.setItem('petitbox_newsletter_seen', '1');
 }
 if(!sessionStorage.getItem('petitbox_newsletter_seen')){
-  setTimeout(() => {
-    if(!sessionStorage.getItem('petitbox_newsletter_seen')){
-      newsletterBox.classList.add('show');
-    }
-  }, 30000);
+setTimeout(() => {
+if(!sessionStorage.getItem('petitbox_newsletter_seen')){
+newsletterBox.classList.add('show');
+}
+}, 30000);
 }
 document.getElementById('newsletterClose').addEventListener('click', dismissNewsletter);
 
 const newsletterForm = document.getElementById('newsletterForm');
 newsletterForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const formData = new FormData(newsletterForm);
-  fetch('/', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: new URLSearchParams(formData).toString(),
-  }).finally(() => {
-    newsletterForm.style.display = 'none';
-    document.getElementById('newsletterSuccess').style.display = 'block';
-    sessionStorage.setItem('petitbox_newsletter_seen', '1');
-  });
+e.preventDefault();
+const formData = new FormData(newsletterForm);
+fetch('/', {
+method: 'POST',
+headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+body: new URLSearchParams(formData).toString(),
+}).finally(() => {
+newsletterForm.style.display = 'none';
+document.getElementById('newsletterSuccess').style.display = 'block';
+sessionStorage.setItem('petitbox_newsletter_seen', '1');
+});
 });
 </script>
 
