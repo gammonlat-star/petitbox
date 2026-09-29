@@ -40,8 +40,6 @@ exports.handler = async (event) => {
         ? crypto.randomUUID()
         : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-    const siteUrl = process.env.URL || 'https://petitbox.art';
-
     const payer = { email };
 
     const orderPayload = {
@@ -49,25 +47,14 @@ exports.handler = async (event) => {
       processing_mode: 'manual',
       total_amount: totalAmountPEN,
       external_reference: externalReference || `petitbox_${Date.now()}`,
-      description: `${title} — US$ ${priceUSDNum.toFixed(2)} (tipo de cambio S/ ${rate.toFixed(2)})`,
       payer,
       items: [
         {
           title: title,
           unit_price: totalAmountPEN,
           quantity: 1,
-          unit_measure: 'unit',
-          total_amount: totalAmountPEN,
         },
       ],
-      config: {
-        online: {
-          success_url: `${siteUrl}/order-received.html`,
-          failure_url: `${siteUrl}/order-failed.html`,
-          pending_url: `${siteUrl}/order-received.html`,
-          auto_return: 'approved',
-        },
-      },
     };
 
     const mpRes = await fetch('https://api.mercadopago.com/v1/orders', {
