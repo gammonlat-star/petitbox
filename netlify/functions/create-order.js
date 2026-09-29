@@ -42,13 +42,7 @@ exports.handler = async (event) => {
 
     const siteUrl = process.env.URL || 'https://petitbox.art';
 
-    // Nombre del comprador: se divide en nombre y apellido para el payer de Mercado Pago
     const payer = { email };
-    if (fullName && fullName.trim()) {
-      const parts = fullName.trim().split(/\s+/);
-      payer.first_name = parts[0];
-      payer.last_name = parts.slice(1).join(' ') || parts[0];
-    }
 
     const orderPayload = {
       type: 'online',
